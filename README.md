@@ -1,7 +1,7 @@
 # KmeansCodeBookSpeech
 generates speech-based codebook using K-means
 
-All the following files and graphs are in "K-means/K-means/" directory
+All the following files and graphs are in "K-means/" directory
 
 config.h---> configuration file to set various things such as delimiter, filename, thresold distortion allowed, precision of the code vectors, etc.
 
