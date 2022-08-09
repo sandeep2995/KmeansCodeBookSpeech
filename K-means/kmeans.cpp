@@ -24,8 +24,8 @@ ofstream logcep,logdist,cb, logclustersize;
 
 struct node
 {
-    long cluster;
-    double data[cepsize];
+	long cluster;
+	double data[cepsize];
 };
 
 list<struct node *>nodelist,codebook; //to store the universe
@@ -33,24 +33,24 @@ list<struct node *>::iterator iter; //to iterate trhough list
 list<struct node *>::iterator iternl;//to iterate through test data
 list<struct node *>::iterator itercb; // to iterate through codebook vectors
 struct node* centers[cbsize]; //to store sum of vectors of a cluster
-//struct node* centersquare[cbsize]; //to store sum of squares of vectors of a cluster
+			      //struct node* centersquare[cbsize]; //to store sum of squares of vectors of a cluster
 
 
 void readceps() // this method reads all the universe of cepstral coefficients into list called nodelist
 {
 	string item;
-    inpt.open(filename,ios::in);
-    if(!inpt) //display error message if we cant open the file
-    {
-        cout<<"file cant be open"<<endl;
-	    inpt.close();
+	inpt.open(filename,ios::in);
+	if(!inpt) //display error message if we cant open the file
+	{
+		cout<<"file cant be open"<<endl;
+		inpt.close();
 		system("pause");
-    }
-	
+	}
+
 	struct node* temp; //temp node to take each vector from textfile into nodelist
-    while(!inpt.eof())
-    {
-        getline(inpt,line);//get the line by reading until newline is encountered
+	while(!inpt.eof())
+	{
+		getline(inpt,line);//get the line by reading until newline is encountered
 		cepcoecount++; //increment the number of cepstral coefficients by one
 		stringstream ss(line); // convert the line to string stream so that it can be splitted easily
 		int i=0;
@@ -58,15 +58,15 @@ void readceps() // this method reads all the universe of cepstral coefficients i
 		while(getline(ss,item,delim))//split w.r.t delim and splitted substrings lies in item
 		{
 			temp->data[i++]=stod(item.c_str());//c.str()-->to get a pointer to a "null-terminated character array with data equivalent to those stored in the string" 
-			//cout<<temp->data[i-1]<<endl;
+							   //cout<<temp->data[i-1]<<endl;
 		}
 		temp->cluster=-1; //indicates not yet clustered
 		nodelist.push_back(temp);
-    }
+	}
 	nodelist.pop_back(); //to eliminate the last line from text file which is nothing but new line and hence stores garbage results
 	cepcoecount--;//so decrement the count by 1
-    cout<<"number of cepstral coefficients = "<<cepcoecount<<endl;
-    inpt.close();
+	cout<<"number of cepstral coefficients = "<<cepcoecount<<endl;
+	inpt.close();
 }
 
 void initialization() //to select initial cluster centers
@@ -78,7 +78,7 @@ void initialization() //to select initial cluster centers
 	{
 		time(&timer); //get the time in ticks
 		ini=(rand()+timer)%(cepcoecount-0+1)+0;//min-->0, max-->cepcoecount for random number generation between two numbers
-		//cout<<ini<<endl;
+						       //cout<<ini<<endl;
 		iter = nodelist.begin();
 		for(long j=1;(j<ini) && (iter!=nodelist.end());j++) //skip the initial vectors to reach the desired vector
 			iter++;
@@ -89,7 +89,7 @@ void initialization() //to select initial cluster centers
 		for(int j=0;j<cepsize;j++) //copy the data values
 			tempstore->data[j]=tempcopy->data[j];
 		codebook.push_back(tempstore); //store it in codebook
-		//cout<<"stored in code book "<<i<<endl;
+					       //cout<<"stored in code book "<<i<<endl;
 	}
 }
 
@@ -98,11 +98,11 @@ void initializecentroid()
 	for(int i=0;i<cbsize;i++)
 	{
 		(centers[i])->cluster=0;//use cluster to store number of elements in the cluster as index already indicates the cluster number
-		//(centersquare[i])->cluster=0;//use cluster to store number of elements in the cluster as index already indicates the cluster number
+					//(centersquare[i])->cluster=0;//use cluster to store number of elements in the cluster as index already indicates the cluster number
 		for(int j=0;j<cepsize;j++)
 		{
 			(centers[i])->data[j]=0; //set all the data values to zero
-			//(centersquare[i])->data[j]=0; //set all the data values to zero
+						 //(centersquare[i])->data[j]=0; //set all the data values to zero
 		}
 	}
 }
@@ -146,7 +146,7 @@ void eucledian() //classification based on eucledian distance
 		distortion+=refdist; //add the distance to distortion
 		(*iternl)->cluster=index; //associate the vector with the correpsonding cluster with lowest distance
 		centroid(*iternl);//send it for centroid calculation
-		//cout<<"distortion = "<<distortion<<"  cluster = "<<(*iternl)->cluster<<endl;
+				  //cout<<"distortion = "<<distortion<<"  cluster = "<<(*iternl)->cluster<<endl;
 		iternl++; //get next vector from universe
 	}
 }
@@ -185,7 +185,7 @@ void tokhura()
 		distortion+=refdist; //add the distance to distortion
 		(*iternl)->cluster=index; //associate the vector with the correpsonding cluster with lowest distance
 		centroid(*iternl);//send it for centroid calculation
-		//cout<<"distortion = "<<distortion<<"  cluster = "<<(*iternl)->cluster<<endl;
+				  //cout<<"distortion = "<<distortion<<"  cluster = "<<(*iternl)->cluster<<endl;
 		iternl++; //get next vector from universe
 	}
 }
@@ -203,7 +203,7 @@ void tokhuraweightsbyme()
 		xsquare->data[i]=0;
 	}
 	iter = nodelist.begin(); //get the first vector from universe
-	
+
 	while(iter != nodelist.end()) //iterate till the last vector in the universe is obtained
 	{
 		temp=(*iter);
@@ -275,7 +275,7 @@ void displayvectors() //to display all vectors of cepstral coefficients
 {
 	struct node* temp;
 	iter = nodelist.begin(); //get the first vector from universe
-	
+
 	while(iter != nodelist.end()) //iterate till the last vector in the universe is obtained
 	{
 		temp=(*iter);
@@ -350,7 +350,7 @@ void algo()
 		updatecodevector(); //update the cluster centers to new centroids
 		cout<<"distortion = "<<distortion<<"\titeration = "<<iterations<<endl;
 		logdist<<distortion/cbsize<<endl; //average distortion per codebook vector or per cluster
-		//logdist<<abs((olddistortion-distortion))*100/distortion<<endl;
+						  //logdist<<abs((olddistortion-distortion))*100/distortion<<endl;
 	}
 	logdist.close();
 	logclustersize.close();
@@ -359,18 +359,18 @@ void algo()
 void kmeans()
 {
 	readceps(); //to read the cepstral coefficient vectors from available universe
-	//tokhuraweightsbysir(); //use the tokhura weights given by sir
+		    //tokhuraweightsbysir(); //use the tokhura weights given by sir
 	tokhuraweightsbyme(); //compute the tokhura weights from universe
 	algo(); // apply algorithm on universe
-	//displayvectors(); //diplay vectors of universe
+		//displayvectors(); //diplay vectors of universe
 	displaycodebook(); //store and display generated codebook
 }
 
 int main()
 {
-		kmeans(); //call k-means
+	kmeans(); //call k-means
 
-		system("pause");
+	system("pause");
 
 	return 0;
 }
